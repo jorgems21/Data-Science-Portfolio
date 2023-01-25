@@ -1,0 +1,16 @@
+library(shiny)
+library(shinydashboard)
+library(ggplot2)
+library(ggvis)
+library(RColorBrewer)
+library(DT)
+library(tidyr)
+library(reshape2)
+library(ggthemes)
+library(zoo)
+library(RColorBrewer)
+library(ggmap)
+library(shinydashboard)
+library(dplyr)
+
+df <- Crime_Incident_Reports_August_2015_September_2020_
