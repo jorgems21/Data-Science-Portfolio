@@ -14,17 +14,19 @@ library(shinydashboard)
 library(dplyr)
 
 
-e <- CleanedCrimes #Cleaned crimes is the final cleaned dataset
+e <- df #Cleaned crimes is the final cleaned dataset
 
-offenseCodeGrp <- unique(e$OFFENSE_CODE_GROUP)
-districts <- unique(e$NAMED_DISTRICT)
-hours <- unique(e$HOUR)
+
+
+offenseCodeGrp <- unique(df$OFFENSE_CODE_GROUP)
+districts <- unique(df$NAMED_DISTRICT)
+hours <- unique(df$HOUR)
 streets <- c("WASHINGTON ST", "BLUE HILL AVE", "BOYLSTON ST", "HARRISON AVE" , 
              "MASSACHUSETTS AVE", "CENTRE ST", "TREMONT ST", "HYDE PARK AVE", 
              "COMMONWEALTH AVE", "TREMONT ST")
 
-api_key <- "AIzaSyBrC0xqUtMTASlZozbSR51IJSSUCfTixPQ"
-register_google(api_key)
+# api_key <- "AIzaSyBrC0xqUtMTASlZozbSR51IJSSUCfTixPQ"
+# register_google(api_key)
 
 
 ui = dashboardPage(
@@ -148,7 +150,7 @@ get_data <- function(input){
   filter_names <- c("District", "OffenseType", "Shooting", "Time", "Street")
   col_names_for_filters <- c("NAMED_DISTRICT", "OFFENSE_CODE_GROUP", "SHOOTING", "HOUR", "STREET")
   
-  current_data <- e
+  current_data <- df
   
   for (index in c(1:length(filter_names))) {
     cur_filter <- input[[filter_names[index]]]
@@ -165,17 +167,17 @@ server = shinyServer(function(input, output, session) {
 
   data <- reactive({
     req(input$variable)
-    df <- e %>% filter(NAMED_DISTRICT %in% input$variable) %>% group_by(HOUR)
+    df <- df %>% filter(NAMED_DISTRICT %in% input$variable) %>% group_by(HOUR)
   })
   
   dataOp <- reactive({
     req(input$checkGroup)
-    df <- e %>% filter(OFFENSE_CODE_GROUP %in% input$checkGroup) %>% group_by(NAMED_DISTRICT)
+    df <- df %>% filter(OFFENSE_CODE_GROUP %in% input$checkGroup) %>% group_by(NAMED_DISTRICT)
   })
   
   dataPltSht <- reactive({
     req(input$dist)
-    df <- e %>% filter(NAMED_DISTRICT %in% input$dist)
+    df <- df %>% filter(NAMED_DISTRICT %in% input$dist)
   })
   
   output$plotShooting<- renderPlot({
