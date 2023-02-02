@@ -15,12 +15,12 @@ library(dplyr)
 
 df <- Crime_Incident_Reports_August_2015_September_2020_
 # 
-str(clean_df)
-is.na(df)
-summary(df)
-unique(df$OFFENSE_CODE_GROUP)
-
-unique(df$DISTRICT)
+# str(clean_df)
+# is.na(df)
+# summary(df)
+# unique(df$OFFENSE_CODE_GROUP)
+# 
+# unique(df$DISTRICT)
 
 #Cleaning NA's from df and drop other cols
 clean_df <- df %>% drop_na(OFFENSE_CODE_GROUP, DISTRICT)
@@ -49,10 +49,14 @@ clean_df$DISTRICT <- gsub('E5', 'West Roxbury', clean_df$DISTRICT)
 
 districts <- unique(clean_df$DISTRICT)
 
-clean_df %>%
+clean_df$OCCURRED_ON_DATE <- as.Date(clean_df$OCCURRED_ON_DATE)
+#Top 10 crimes
+top10crimes <- clean_df %>%
   group_by(OFFENSE_CODE_GROUP) %>%
   summarise(counts = n()) %>%
-  arrange(desc(counts))
+  arrange(desc(counts)) %>%
+  slice(1:10)
+
 
 # d <- filter(myDf, OFFENSE_CODE_GROUP == "Robbery" | 
 #               OFFENSE_CODE_GROUP == "Homicide" | 

@@ -15,7 +15,13 @@ fluidPage(
              tabPanel("General",
                       sidebarLayout(
                         sidebarPanel(
-                          selectInput("variable", "Districts:", choices = sort(districts), multiple = TRUE)
+                          selectizeInput("districts", "Districts:", choices = sort(districts), multiple = TRUE)
+                          ,selectizeInput("crimes", "Top 10 Crime Types:", choices = sort(top10crimes$OFFENSE_CODE_GROUP), multiple = TRUE)
+                          ,dateRangeInput('dateRange',
+                                          label = 'Date range input: yyyy-mm-dd',
+                                          start = min(clean_df$OCCURRED_ON_DATE), end = max(clean_df$OCCURRED_ON_DATE)
+                          )
+                          ,actionButton("run", "Run")
 
                         ),
                         mainPanel(DT::dataTableOutput("bus_table"))
