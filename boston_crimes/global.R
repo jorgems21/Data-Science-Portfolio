@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(shinythemes)
 library(ggplot2)
 library(ggvis)
 library(RColorBrewer)
@@ -12,6 +13,8 @@ library(RColorBrewer)
 library(ggmap)
 library(shinydashboard)
 library(dplyr)
+
+
 
 df <- Crime_Incident_Reports_August_2015_September_2020_
 # 
@@ -57,7 +60,7 @@ top10crimes <- clean_df %>%
   arrange(desc(counts)) %>%
   slice(1:10)
 
-
+filter(clean_df, OFFENSE_CODE_GROUP == top10crimes$OFFENSE_CODE_GROUP)
 # d <- filter(myDf, OFFENSE_CODE_GROUP == "Robbery" | 
 #               OFFENSE_CODE_GROUP == "Homicide" | 
 #               OFFENSE_CODE_GROUP == "Residential Burglary" |

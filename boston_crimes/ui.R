@@ -7,10 +7,8 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-
 # Define UI for application that draws a histogram
-fluidPage(
+fluidPage(theme = shinytheme("flatly"),
   navbarPage(title = "Crime in Boston",id= "main",
              tabPanel("General",
                       sidebarLayout(
@@ -24,7 +22,7 @@ fluidPage(
                           ,actionButton("run", "Run")
 
                         ),
-                        mainPanel(DT::dataTableOutput("bus_table"))
+                        mainPanel(plotOutput("test_plot"))
                       )),
              navbarMenu("Map",
                         tabPanel("Summary"),
