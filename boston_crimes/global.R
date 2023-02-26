@@ -13,8 +13,7 @@ library(RColorBrewer)
 library(ggmap)
 library(shinydashboard)
 library(dplyr)
-
-
+library(hrbrthemes)
 
 df <- Crime_Incident_Reports_August_2015_September_2020_
 # 

@@ -22,7 +22,8 @@ fluidPage(theme = shinytheme("flatly"),
                           ,actionButton("run", "Run")
 
                         ),
-                        mainPanel(plotOutput("test_plot"))
+                        mainPanel(plotOutput("test_plot"),
+                                  plotOutput("test_plot_2"))
                       )),
              navbarMenu("Map",
                         tabPanel("Summary"),
