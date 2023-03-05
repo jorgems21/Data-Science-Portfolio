@@ -15,7 +15,8 @@ library(shinydashboard)
 library(dplyr)
 library(hrbrthemes)
 
-df <- Crime_Incident_Reports_August_2015_September_2020_
+df <- readxl::read_excel("Crime Incident Reports (August 2015 - September 2020) .xlsx")
+#df <- Crime_Incident_Reports_August_2015_September_2020_
 # 
 # str(clean_df)
 # is.na(df)
