@@ -1,22 +1,52 @@
+#------FIFA 19 Player Potential Analysis--------#
+# source: https://www.kaggle.com/datasets/javagarm/fifa-19-complete-player-dataset
+# The purpose of this project is to use the FIFA 19 dataset to analyze what are
+# the most important variables that contribute to a higher/lower player's potential in the
+# FIFA 19 video game.
+
+# FIFA 19 is a soccer video game created by EA Sports that allows the user of the game
+# to play as any team/individual player from a first point of view. Each player has
+# distinct ratings on a given set of player characteristics and attributes such as passing
+# dribbling, shooting, speed, tackling, etc. One of the player's attributes is "Potential"
+# which translates to a player's ability to reach a higher Overall rating. The higher 
+# the Overall rating, then the better the player is.
+#-----------------------------------------------#
+library(readxl)
+install.packages("rJava")
+library(rJava)
+library(tidyverse)
+options(java.parameters = "-Xmx8g")
 rm(list = ls())
-mydata<- readxl::read_xlsx("fifa_19_player_potential_analysis/FIFA 19.xlsx")
+mydata<- readxl::read_xlsx("fifa_19_player_potential_analysis/FIFA_19.xlsx")
 mydata
 summary(mydata)
 str(mydata)
-mydata$`Work Rate`
+
 mydata<- rename(mydata, c("PFoot" = `Preferred Foot`,
                           "WFoot" = `Weak Foot`,
                           "WorkRate" = `Work Rate`,
-                          "Skills" = `Skill Moves`))
+                          "Skills" = `Skill Moves`,
+                          "Intl_Rep" = `International Reputation`,
+                          "Body_type" = `Body Type`))
 summary(mydata)
+mydata <- mydata %>%
+  mutate_if(is.character,as.factor)
 
 # Pick variables that do not h
-myvars<- c("Name","Age", "Nationality", "Overall","Skills",
-           "Potential", "Club","WorkRate","Value", "Wage", "PFoot","WFoot","Finishing",
-           "ShortPassing","LongPassing","Dribbling","BallControl")
+myvars<- c("Name","Age", "Nationality", "Overall","Potential","Club",
+           "Value", "Wage","Skills","WorkRate", "PFoot","Intl_Rep","WFoot","Finishing",
+           "Body_type","Position","Height","Weight","ShortPassing","LongPassing","Dribbling","BallControl",
+           "Crossing", "HeadingAccuracy","Volleys","Curve","FKAccuracy",
+           "Acceleration",	"SprintSpeed",	"Agility",
+           "Reactions","Balance","ShotPower","Jumping","Stamina",
+           "Strength","LongShots","Aggression", "Interceptions",
+           "Positioning","Vision","Penalties","Composure",
+           "Marking",	"StandingTackle",	"SlidingTackle")
+
 newdata<-mydata[myvars]
 newdata
 summary(newdata)
+na.omit(newdata)
 hist(newdata$Skills)
 newdata$WorkRate<- as.factor(newdata$WorkRate)
 hist(newdata$WorkRate)
