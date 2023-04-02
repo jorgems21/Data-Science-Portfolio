@@ -12,7 +12,6 @@
 # the Overall rating, then the better the player is.
 #-----------------------------------------------#
 library(readxl)
-install.packages("rJava")
 library(rJava)
 library(tidyverse)
 options(java.parameters = "-Xmx8g")
@@ -46,22 +45,24 @@ myvars<- c("Name","Age", "Nationality", "Overall","Potential","Club",
 newdata<-mydata[myvars]
 newdata
 summary(newdata)
-na.omit(newdata)
+# Take out NA's
+newdata <- na.omit(newdata)
 hist(newdata$Skills)
-newdata$WorkRate<- as.factor(newdata$WorkRate)
+unique(newdata$WorkRate)
 hist(newdata$WorkRate)
-is.factor(newdata$WorkRate)
+
 summary(newdata)
 newdata$Nationality
 summary(newdata$Nationality)
+
 plot(newdata$Potential,newdata$Overall)
 newdata$Nationality<- as.factor(newdata$Nationality)
 summary(newdata)
 ##England subset
-Brits<- newdata[newdata$Nationality=="England",]
-summary(Brits)
-English<-na.omit(Brits)
-summary(English)
+english_team <- newdata[newdata$Nationality=="England",]
+summary(english_team)
+english_team2<-na.omit(english_team)
+summary(english_team2)
 ##Germany
 Germans<- newdata[newdata$Nationality=="Germany",]
 summary(Germans)
@@ -85,30 +86,29 @@ Brazileros<- newdata[newdata$Nationality=="Brazil",]
 Verdeamarelos<- na.omit(Brazileros)
 summary(Verdeamarelos)
 
+# sample1<- newdata[newdata$Nationality=="England" | newdata$Nationality=="Germany" | newdata$Nationality=="Spain" | newdata$Nationality=="Argentina" | newdata$Nationality=="France" | newdata$Nationality=="Brazil",]
+# sample1
+# summary(sample1)
+# sample1$Nationality[sample1$Nationality==0]<- NA
+# summary(sample1)
+# s1<- na.omit(sample1)
+# s1
+# summary(s1)
+# describe(s1)
+# describe(newdata)
+# plot(s1$Potential,s1$Overall)
+# is.factor(s1$Skills)
+# s1$Skills<- as.factor(s1$Skills)
+# str(s1)
+# s1$PFoot<- as.factor(s1$PFoot)
+# vars<- c("Finishing","Skills","Overall","Potential","WFoot","BallControl","ShortPassing")
+# cor(s1[vars])
+# vars2<- c("Skills", "Potential", "WFoot")
+# cor(s1[vars2])
+# 
+# cr<- s1[vars2]
 
-sample1<- newdata[newdata$Nationality=="England" | newdata$Nationality=="Germany" | newdata$Nationality=="Spain" | newdata$Nationality=="Argentina" | newdata$Nationality=="France" | newdata$Nationality=="Brazil",]
-sample1
-summary(sample1)
-sample1$Nationality[sample1$Nationality==0]<- NA
-summary(sample1)
-s1<- na.omit(sample1)
-s1
-summary(s1)
-describe(s1)
-describe(newdata)
-plot(s1$Potential,s1$Overall)
-is.factor(s1$Skills)
-s1$Skills<- as.factor(s1$Skills)
-str(s1)
-s1$PFoot<- as.factor(s1$PFoot)
-vars<- c("Finishing","Skills","Overall","Potential","WFoot","BallControl","ShortPassing")
-cor(s1[vars])
-vars2<- c("Skills", "Potential", "WFoot")
-cor(s1[vars2])
-
-cr<- s1[vars2]
 library(corrplot)
-install.packages("corrgram")
 library(corrgram)
 library(psych)
 corrplot(corrgram(cr))
@@ -153,11 +153,8 @@ ggPredict(reg1, interactive = TRUE)
 
 summary(reg1)
 
-install.packages("ggiraph")
-install.packages("ggiraphExtra")
 library(ggiraph)
 library(ggiraphExtra)
-install.packages("ggeffects")
 library(ggeffects)
 ggPredict(s1, se=TRUE, interactive = TRUE)
 
@@ -211,6 +208,15 @@ legend(x=75, y=60, c("Left Foot","Right Foot"),
        pch=21)
 
 ##regression Q2
+library(tidyr)
+newdata <- separate(newdata, WorkRate, into = c("Attacking_WR", "Defending_WR"), sep = "/")
+newdata$Attacking_WR <- as.factor(newdata$Attacking_WR)
+newdata$Defending_WR <- as.factor(newdata$Defending_WR)
+newdata$Height <- as.factor(newdata$Height)
+
+df$height_in <- as.numeric(sub("(\\d+)'(\\d+)", "\\1*12+\\2", newdata$Height))
+
+
 s2<- sample(nrow(s1),500, replace = TRUE)
 s2
 fit1<- lm(s1$Potential~s1$Finishing+s1$Skills+s1$BallControl+s1$ShortPassing)
@@ -250,7 +256,7 @@ legend(x=85, y=65, c("Left Foot","Right Foot"),
        col = c("black","red"),
        pch=21)
 
-##skills # use asfactor
+##skills use as factor
 STsample$Skills<- as.numeric(STsample$Skills)
 plot(STsample$Potential~STsample$Skills,col= factor(STsample$PFoot),
      xlab="Skills", ylab="Potential",
@@ -260,8 +266,6 @@ legend(x=3.5, y=65, c("Left Foot","Right Foot"),
        pch=21)
 
 ##ball control
-
-
 plot(STsample$Potential~STsample$BallControl,col= factor(STsample$PFoot),
      xlab="BallControl", ylab="Potential",
      main="Linearity between BallControl and Potential Ratings")
@@ -314,15 +318,12 @@ STsample<- na.omit(samplex)
 STsample
 summary(STsample)
 
-
-
 reg2<- lm(STsample$Potential~STsample$Finishing+STsample$BallControl+STsample$SprintSpeed+STsample$Strength+STsample$ShortPassing)
 summary(reg2)
 
 ##finishing +pote*pfoot
 reg4<- lm(STsample$Potential~STsample$Finishing+STsample$PFoot)
 summary(reg4)
-
 
 regplot4<- ggplot(STsample, aes(x=Finishing, y=Potential, color=PFoot))+
   geom_point()

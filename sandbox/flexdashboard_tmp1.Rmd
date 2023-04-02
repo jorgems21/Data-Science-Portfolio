@@ -1,0 +1,87 @@
+---
+title: "flexdashboard_tmp1"
+author: "Jorge Montoya"
+date: "2023-03-30"
+output: 
+  flexdashboard::flex_dashboard:
+    runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(shiny)
+library(dplyr)
+library(ggplot2)
+```
+
+Sidebar {.sidebar}
+
+```{r echo = FALSE}
+# Define the inputs for the Shiny app
+selectInput("species", "Select a Species:", 
+            choices = unique(iris$Species))
+
+sliderInput("petal_length", "Select Petal Length:",
+            min = min(iris$Petal.Length),
+            max = max(iris$Petal.Length),
+            value = c(min(iris$Petal.Length), max(iris$Petal.Length)),
+            step = 0.1)
+
+```
+
+Page 1
+Row {.tabset}
+Scatterplot
+```{r echo = FALSE}
+# Create a scatterplot with ggplot2
+output$scatterplot <- renderPlot({
+  iris %>%
+    filter(Species == input$species,
+           Petal.Length >= input$petal_length[1],
+           Petal.Length <= input$petal_length[2]) %>%
+    ggplot(aes(x = Sepal.Length, y = Sepal.Width)) +
+    geom_point()
+})
+
+# Display the scatterplot
+plotOutput("scatterplot")
+
+```
+
+Table
+
+```{r echo = FALSE}
+# Create a table of the filtered iris data
+output$table <- renderTable({
+  iris %>%
+    filter(Species == input$species,
+           Petal.Length >= input$petal_length[1],
+           Petal.Length <= input$petal_length[2])
+})
+
+# Display the table
+tableOutput("table")
+
+```
+
+Page 2
+Bar Chart
+
+```{r echo = FALSE}
+# Create a bar chart of the filtered iris data
+output$barchart <- renderPlot({
+  iris %>%
+    filter(Species == input$species,
+           Petal.Length >= input$petal_length[1],
+           Petal.Length <= input$petal_length[2]) %>%
+    ggplot(aes(x = Species)) +
+    geom_bar()
+})
+
+# Display the bar chart
+plotOutput("barchart")
+
+```
+
+
+
