@@ -52,6 +52,16 @@ unique(newdata$WorkRate)
 hist(newdata$WorkRate)
 
 summary(newdata)
+ST_data <- newdata %>% 
+  filter(Position == "ST")
+
+# Cleaning the data  
+library(tidyr)
+
+ST_data <- separate(ST_data, WorkRate, into = c("AttWR", "DfWR"), sep = "/")
+ST_data <- select(ST_data, -c(Name,Club, Value, Wage, Body_type, Position))
+
+
 newdata$Nationality
 summary(newdata$Nationality)
 
@@ -86,27 +96,6 @@ Brazileros<- newdata[newdata$Nationality=="Brazil",]
 Verdeamarelos<- na.omit(Brazileros)
 summary(Verdeamarelos)
 
-# sample1<- newdata[newdata$Nationality=="England" | newdata$Nationality=="Germany" | newdata$Nationality=="Spain" | newdata$Nationality=="Argentina" | newdata$Nationality=="France" | newdata$Nationality=="Brazil",]
-# sample1
-# summary(sample1)
-# sample1$Nationality[sample1$Nationality==0]<- NA
-# summary(sample1)
-# s1<- na.omit(sample1)
-# s1
-# summary(s1)
-# describe(s1)
-# describe(newdata)
-# plot(s1$Potential,s1$Overall)
-# is.factor(s1$Skills)
-# s1$Skills<- as.factor(s1$Skills)
-# str(s1)
-# s1$PFoot<- as.factor(s1$PFoot)
-# vars<- c("Finishing","Skills","Overall","Potential","WFoot","BallControl","ShortPassing")
-# cor(s1[vars])
-# vars2<- c("Skills", "Potential", "WFoot")
-# cor(s1[vars2])
-# 
-# cr<- s1[vars2]
 
 library(corrplot)
 library(corrgram)
