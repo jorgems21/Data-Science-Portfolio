@@ -14,7 +14,8 @@
 
 
 install_required_packages <- function() {
-  required_packages <- c("shiny", "tidyverse", "caret", "rpart", "randomForest", "gbm", "ggplot2")
+  required_packages <- c("shiny", "tidyverse", "caret", "rpart", "randomForest",
+                         "gbm", "ggplot2","xgboost", "bslib","DT","tidyr","markdown","officer")
   installed_packages <- rownames(installed.packages())
   to_install <- setdiff(required_packages, installed_packages)
   if (length(to_install) > 0) {
@@ -25,18 +26,26 @@ install_required_packages <- function() {
 
 install_required_packages()
 
+
 library(shiny)
 library(tidyverse)
 library(caret)
-library(rpart)
-library(randomForest)
-library(gbm)
+library(xgboost)
 library(ggplot2)
+library(bslib)
+library(dplyr)
+library(DT)
+library(tidyr)
+library(markdown)
+library(officer)
+
+source("functions/global_functions.R")
 
 # Load dataset
-df <- read.csv('data/Nashville_housing_data_2013_2016.csv')
+file_path <- 'data/Nashville_housing_data_2013_2016.csv'
 
-# Remove rows with missing values except for 'Suite/ Condo   #' column
-# Remove rows with missing values
-df <- df %>% drop_na()
+df <- load_and_preprocess_data(file_path)
+
+
+
 
