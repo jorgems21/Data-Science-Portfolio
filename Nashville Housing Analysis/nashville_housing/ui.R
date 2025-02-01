@@ -1,28 +1,10 @@
 # Define UI
-# ui <- fluidPage(
-#   titlePanel("Nashville Housing Deal Predictor"),
-#   sidebarLayout(
-#     sidebarPanel(
-#       numericInput("sale_price", "Sale Price:", value = 200000, min = 10000, max = 1000000, step = 1000),
-#       numericInput("total_value", "Total Value:", value = 250000, min = 10000, max = 1000000, step = 1000),
-#       selectInput("property_city", "City:", choices = unique(df$Property.City)),
-#       numericInput("year_built", "Year Built:", value = 2000, min = 1900, max = 2023),
-#       numericInput("bedrooms", "Bedrooms:", value = 3, min = 1, max = 10),
-#       numericInput("full_bath", "Full Bath:", value = 2, min = 1, max = 5),
-#       numericInput("half_bath", "Half Bath:", value = 1, min = 0, max = 5),
-#       actionButton("predict", "Predict")
-#     ),
-#     mainPanel(
-#       textOutput("prediction_result")
-#     )
-#   )
-# )
 
 ui <- page_fluid(
-  theme = bs_theme(bootswatch = "morph"),
+  theme = bs_theme(bootswatch = "litera"),
   
   h1("Nashville Real Estate Deal Analyzer"),
-  
+  #title = "Nashville Real Estate Deal Analyzer",
   navset_card_tab(
     # Overview Tab
     nav_panel(
@@ -53,9 +35,23 @@ ui <- page_fluid(
           plotOutput("price_dist_plot")
         ),
         card(
-          card_header("Year Built vs Price"),
-          plotOutput("year_price_plot")
+          card_header("Deal Success by City"),
+          plotOutput("good_deal_rate_plot")
         )
+      ),
+      layout_columns(
+        card(
+          card_header("Property Age by Deal Success Rate"),
+          plotOutput("age_by_deal_rate_plot")
+        ),
+        card(
+          card_header("Property Age by Sale Price"),
+          plotOutput("age_by_price_plot")
+        )
+      ),
+      card(
+        card_header("Key Summary Statistics Table"),
+        DTOutput("summary_table")
       ),
       card(
         card_header("Property Details Table"),
@@ -68,13 +64,52 @@ ui <- page_fluid(
       title = "Deal Prediction",
       layout_sidebar(
         sidebar = sidebar(
+          # Price inputs
+          numericInput("sale_price", "Sales Price ($)", 
+                       value = 300000, min = 0, step = 1000),
+          numericInput("total_value", "Total Value ($)", 
+                       value = 350000, min = 0, step = 1000),
           selectInput("property_city", "City:", choices = unique(df$Property.City)),
           numericInput("year_built", "Year Built:", value = 2000, min = 1950, max = 2023),
           numericInput("bedrooms", "Bedrooms:", value = 3, min = 1, max = 6),
           numericInput("full_bath", "Bathrooms:", value = 2, min = 1, max = 4),
           numericInput("half_bath", "Half Baths:", value = 0, min = 0, max = 2),
           #numericInput("pred_sqft", "Square Feet:", value = 2000, min = 800, max = 5000),
-          actionButton("predict", "Analyze Deal", class = "btn-primary")
+          #actionButton("predict", "Analyze Deal", class = "btn-primary")
+        ),
+        layout_columns(
+          fill = FALSE,
+          value_box(
+            title = "ML Model Prediction",
+            value = textOutput("probability"),
+            showcase = bsicons::bs_icon("robot"),
+            theme = "primary",
+            full_screen = TRUE
+          ),
+          value_box(
+            title = "Potential Savings",
+            value = textOutput("savings"),
+            showcase = bsicons::bs_icon("piggy-bank"),
+            full_screen = TRUE
+          )
+        ),
+        card(
+          card_header("Deal Analysis Dashboard"),
+          layout_columns(
+            card(
+              plotOutput("probability_gauge")
+            ),
+            card(
+              "ML Model Insights",
+              textOutput("insights"),
+              hr(),
+              "This prediction is based on a machine learning model trained on historical real estate data, considering multiple factors including market trends, property characteristics, and location impacts."
+            )
+          )
+        ),
+        card(
+          card_header("Model Feature Importance"),
+          plotOutput("feature_importance")
         ),
         card(
           card_header("Deal Analysis Results"),

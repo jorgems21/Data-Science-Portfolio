@@ -14,7 +14,7 @@
 
 
 install_required_packages <- function() {
-  required_packages <- c("shiny", "tidyverse", "caret", "rpart", "randomForest",
+  required_packages <- c("shiny", "tidyverse", "caret", "rpart", "randomForest","plotly",
                          "gbm", "ggplot2","xgboost", "bslib","DT","tidyr","markdown","officer")
   installed_packages <- rownames(installed.packages())
   to_install <- setdiff(required_packages, installed_packages)
@@ -31,6 +31,7 @@ library(shiny)
 library(tidyverse)
 library(caret)
 library(xgboost)
+library(randomForest)
 library(ggplot2)
 library(bslib)
 library(dplyr)
@@ -38,6 +39,7 @@ library(DT)
 library(tidyr)
 library(markdown)
 library(officer)
+library(plotly)
 
 source("functions/global_functions.R")
 
@@ -45,6 +47,7 @@ source("functions/global_functions.R")
 file_path <- 'data/Nashville_housing_data_2013_2016.csv'
 
 df <- load_and_preprocess_data(file_path)
+getwd()
 
 
 
