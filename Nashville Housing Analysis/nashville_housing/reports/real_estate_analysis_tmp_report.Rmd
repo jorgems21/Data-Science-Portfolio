@@ -1,0 +1,132 @@
+---
+title: "Nashville Real Estate Analysis Report"
+author: "`r params$user_name`"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    insnumber_sections: true
+    theme: united
+    highlight: tango
+params:
+  sale_price: NA
+  total_value: NA
+  prop_city: NA
+  year_built: NA
+  bedrooms: NA
+  full_bath: NA
+  half_bath: NA
+  savings: NA
+  plots: NA
+  predicted_percentage: NA
+  model: NA
+  housing_data: NA
+  user_name: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+```
+
+# Executive Summary
+Welcome, **`r params$user_name`**! This report contains an analysis of Nashville housing data, including pricing trends and predictions.
+
+This report provides an **in-depth analysis** of real estate data, including **predictive modeling** and key **visualizations**. The insights will help **home-buyers** make informed decisions.
+
+## Property Specifications
+
+The following specifications were used for the prediction:
+
+```{r}
+specs_df <- data.frame(
+  Specification = c("Sale Price", "Total Value","Bedrooms", "Full Bathrooms","Half Bathrooms" ,"Year Built", "Location"),
+  Value = c(params$sale_price, params$total_value, params$prop_city, params$year_built,params$bedrooms, params$full_bath, params$half_bath)
+)
+knitr::kable(specs_df, format = "simple", caption = "Property Specifications")
+```
+
+# Descriptive Analysis
+
+## Price by City
+```{r price-by-city}
+print(params$plots$price_city)
+```
+
+## Good Deal Rate by City
+```{r good-deal-rate}
+print(params$plots$good_deal_rate)
+```
+
+## Property Age vs. Sale Price
+```{r age-vs-price}
+print(params$plots$age_price)
+```
+
+## Property Age vs. Good Deal Rate (Boxplot)
+```{r age-vs-deal}
+print(params$plots$age_deal_rate)
+```
+
+# Predictive Model
+
+This prediction is based on a machine learning model trained on historical real estate data, considering multiple factors including market trends, property characteristics, and location impacts. This model also uses the above specifications provided by the user.
+
+```{r train-model}
+sprintf("$%s", format(round(params$predicted_percentage), big.mark = ","))
+if (params$predicted_percentage > 0.7) {
+      paste("High probability of a good deal! The ML model predicts this property has",
+            round(params$predicted_percentage * 100, 1), "% chance of being a profitable investment with potential savings of $",
+            format(savings_val, big.mark = ","), ".")
+    } else if (params$predicted_percentage > 0.4) {
+      paste("Moderate potential. The model suggests a", round(params$predicted_percentage * 100, 1),
+            "% chance of being a good deal. Consider negotiating the price or conducting more research.")
+    } else {
+      paste("Low probability of a good deal (", round(params$predicted_percentage * 100, 1),
+            "%). The ML model suggests looking for other properties or negotiating a lower price.")
+    }
+  
+```
+
+
+## Model Evaluation
+```{r evaluation}
+# # Predictions
+# pred_probs <- predict(xgb_model, dtest)
+# pred_labels <- ifelse(pred_probs > 0.5, 1, 0)
+# 
+# # Confusion Matrix
+# conf_matrix <- confusionMatrix(factor(pred_labels), factor(test_data$GoodDeal))
+# conf_matrix$table
+```
+
+## Feature Importance
+```{r feature-importance}
+print(params$plots$feature_importance)
+```
+
+
+# Summary Table
+```{r summary-table}
+# summary_data <- params$housing_data %>%
+#       group_by(Property.City) %>%
+#       summarise(
+#         Avg_Price = mean(Sale.Price, na.rm = TRUE),
+#         Avg_Value = mean(Total.Value, na.rm = TRUE),
+#         Good_Deal_Rate = mean(GoodDeal, na.rm = TRUE)
+#       )
+# DT::datatable(summary_data, options = list(pageLength = 10))
+```
+
+# Conclusion
+This report provides key **investment insights** based on **data-driven analysis** and a **predictive model** to identify good real estate deals. The results can help guide better investment decisions in the real estate market.
+
+# Disclaimers
+
+- Current house prices may vary significantly based on additional factors not included in this model
+- This report should not be used as the sole basis for real estate decisions
+
+*This is a templated report made by Jorge Montoya*

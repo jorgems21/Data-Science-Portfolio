@@ -217,3 +217,11 @@ output$age_by_price_plot <- renderPlotly({
   plotly::ggplotly(plot)
 })
 
+
+install.packages("xfun", type = "source", dependencies = TRUE)
+
+rmarkdown::render(
+  "reports/test.Rmd",
+  output_format = "pdf_document"
+)
+

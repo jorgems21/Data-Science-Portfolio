@@ -15,7 +15,7 @@
 
 install_required_packages <- function() {
   required_packages <- c("shiny", "tidyverse", "caret", "rpart", "randomForest","plotly",
-                         "gbm", "ggplot2","xgboost", "bslib","DT","tidyr","markdown","officer")
+                         "gbm", "ggplot2","xgboost", "bslib","DT","tidyr","rmarkdown","officer")
   installed_packages <- rownames(installed.packages())
   to_install <- setdiff(required_packages, installed_packages)
   if (length(to_install) > 0) {
@@ -37,7 +37,7 @@ library(bslib)
 library(dplyr)
 library(DT)
 library(tidyr)
-library(markdown)
+library(rmarkdown)
 library(officer)
 library(plotly)
 

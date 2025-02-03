@@ -44,15 +44,6 @@ predict_deal_probability <- function(model,df, price, value, city, year, beds, f
     Full.Bath = full_bath,
     Half.Bath = half_bath
   )
-  
-  #new_data <- new_data %>% mutate(across(where(is.numeric), as.integer))
-  # Ensure all expected columns are present
-  # missing_cols <- setdiff(names(df), names(new_data))
-  # for (col in missing_cols) {
-  #   new_data[[col]] <- NA  # Add missing columns as NA
-  # }
-  str(new_data)
-  str(df)
   # Get probability prediction
   pred_prob <- predict(model, new_data, type = "prob")[, 2]
   return(pred_prob)

@@ -12,7 +12,6 @@ ui <- page_fluid(
       card(
         card_header("About This Application"),
         markdown("
-        ### Nashville Real Estate Deal Analyzer
         
         This application helps real estate investors analyze potential deals using:
         
@@ -20,8 +19,8 @@ ui <- page_fluid(
         * Deal prediction tools
         * Comprehensive reporting
         
-        The data used in this application includes properties from major US cities with
-        various characteristics including size, location, and pricing information.
+        The data used in this application includes properties from the Nashville and Greater
+        Nashville area with various characteristics including size, location and pricing information.
         ")
       )
     ),
@@ -124,6 +123,8 @@ ui <- page_fluid(
       title = "Generate Report",
       card(
         card_header("Download Analysis Report"),
+        textInput("user_name", "Enter your name:", placeholder = "Your Name"),
+        selectInput("report_format", "Choose Report Format:", choices = c("PDF" = "pdf", "HTML" = "html")),
         downloadButton("download_report", "Download Report")
       )
     )
